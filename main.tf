@@ -100,7 +100,7 @@ resource "azurerm_linux_virtual_machine" "example" {
   }
 }
 
-import {
-  to = azurerm_network_interface_backend_address_pool_association.example
-  id = "/subscriptions/6e7476dc-c6a7-443f-a420-ef2d0e3ea6d8/resourceGroups/lb-test-resources/providers/Microsoft.Network/networkInterfaces/example-nic/ipConfigurations/internal|/subscriptions/6e7476dc-c6a7-443f-a420-ef2d0e3ea6d8/resourceGroups/lb-test-resources/providers/Microsoft.Network/loadBalancers/example-lb/backendAddressPools/acctestpool"
-}
+#import {
+#  to = azurerm_network_interface_backend_address_pool_association.example
+#  id = "/subscriptions/6e7476dc-c6a7-443f-a420-ef2d0e3ea6d8/resourceGroups/lb-test-resources/providers/Microsoft.Network/networkInterfaces/example-nic/ipConfigurations/internal|/subscriptions/6e7476dc-c6a7-443f-a420-ef2d0e3ea6d8/resourceGroups/lb-test-resources/providers/Microsoft.Network/loadBalancers/example-lb/backendAddressPools/acctestpool"
+#}
