@@ -1,3 +1,16 @@
+module "loadbalancer" {
+  source                            = "./module/lb"
+  lb_locaion                        = azurerm_resource_group.example.location
+  lb_name                           = "example-lb"
+  lb_resource_group_name            = azurerm_resource_group.example.name
+  lb_sku                            = "Standard"
+  lb_backend_address_pool_name      = "acctestpool"
+  lb_public_ip_name                 = azurerm_public_ip.example.id
+  lb_frontend_ip_configuration_name = "primary"
+  lb_backend_interface_id           = azurerm_network_interface.example.id
+  lb_backend_ip_configuration_name  = "internal"
+}
+
 resource "azurerm_resource_group" "example" {
   name     = "lb-test-resources"
   location = "westus2"
@@ -23,41 +36,6 @@ resource "azurerm_public_ip" "example" {
   resource_group_name = azurerm_resource_group.example.name
   allocation_method   = "Static"
   sku                 = "Standard"
-}
-
-resource "azurerm_lb" "example" {
-  name                = "example-lb"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  sku                 = "Standard"
-
-  frontend_ip_configuration {
-    name                 = "primary"
-    public_ip_address_id = azurerm_public_ip.example.id
-  }
-}
-
-resource "azurerm_lb_backend_address_pool" "example" {
-  loadbalancer_id = azurerm_lb.example.id
-  name            = "acctestpool"
-}
-
-# resource "azurerm_network_interface" "example" {
-#   name                = "example-nic"
-#   location            = azurerm_resource_group.example.location
-#   resource_group_name = azurerm_resource_group.example.name
-
-#   ip_configuration {
-#     name                          = "testconfiguration1"
-#     subnet_id                     = azurerm_subnet.example.id
-#     private_ip_address_allocation = "Dynamic"
-#   }
-# }
-
-resource "azurerm_network_interface_backend_address_pool_association" "example" {
-  network_interface_id    = azurerm_network_interface.example.id
-  ip_configuration_name   = "internal"
-  backend_address_pool_id = azurerm_lb_backend_address_pool.example.id
 }
 
 resource "azurerm_network_interface" "example" {
@@ -100,7 +78,7 @@ resource "azurerm_linux_virtual_machine" "example" {
   }
 }
 
-#import {
-#  to = azurerm_network_interface_backend_address_pool_association.example
-#  id = "/subscriptions/6e7476dc-c6a7-443f-a420-ef2d0e3ea6d8/resourceGroups/lb-test-resources/providers/Microsoft.Network/networkInterfaces/example-nic/ipConfigurations/internal|/subscriptions/6e7476dc-c6a7-443f-a420-ef2d0e3ea6d8/resourceGroups/lb-test-resources/providers/Microsoft.Network/loadBalancers/example-lb/backendAddressPools/acctestpool"
-#}
+import {
+  to = module.loadbalancer.azurerm_network_interface_backend_address_pool_association.this
+  id = "/subscriptions/6e7476dc-c6a7-443f-a420-ef2d0e3ea6d8/resourceGroups/lb-test-resources/providers/Microsoft.Network/networkInterfaces/example-nic/ipConfigurations/internal|/subscriptions/6e7476dc-c6a7-443f-a420-ef2d0e3ea6d8/resourceGroups/lb-test-resources/providers/Microsoft.Network/loadBalancers/example-lb/backendAddressPools/acctestpool"
+}
