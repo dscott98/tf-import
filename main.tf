@@ -1,4 +1,4 @@
-esource "azurerm_resource_group" "example" {
+resource "azurerm_resource_group" "example" {
   name     = "lb-test-resources"
   location = "westus2"
 }
